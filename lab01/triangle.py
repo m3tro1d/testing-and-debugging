@@ -10,25 +10,46 @@ NOT_TRIANGLE = 'не треугольник'
 ERROR = 'неизвестная ошибка'
 
 
+def is_triangle(a, b ,c):
+    return (a + b > c) and (b + c > a) and (a + c > b)
+
+
+def is_equilateral_triangle(a, b ,c):
+    if not is_triangle(a, b, c):
+        return False
+
+    return (a == b) and (b == c)
+
+
+def is_isosceles_triangle(a, b ,c):
+    if not is_triangle(a, b, c):
+        return False
+
+    return (a == b and b != c) or (a == c and c != b) or (b == c and c != a)
+
+
 def main(args):
     if len(args) != 3:
         print(ERROR)
         sys.exit(EXIT_FAILURE)
 
-    a = args[0]
-    b = args[1]
-    c = args[2]
+    try:
+        a = int(args[0])
+        b = int(args[1])
+        c = int(args[2])
+    except ValueError:
+        print(ERROR)
+        sys.exit(EXIT_FAILURE)
 
-    if a == b == c:
+    if is_equilateral_triangle(a, b, c):
         print(EQUILATERAL)
-    elif a == b or b == c or a == c:
+    elif is_isosceles_triangle(a, b, c):
         print(ISOSCELES)
-    else:
+    elif is_triangle(a, b, c):
         print(SCALENE)
+    else:
+        print(NOT_TRIANGLE)
 
 
 if __name__ == '__main__':
-    try:
-        main(sys.argv[1:])
-    except KeyboardInterrupt:
-        print('keyboard interrupt')
+    main(sys.argv[1:])
