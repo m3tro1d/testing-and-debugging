@@ -11,6 +11,9 @@ ERROR = 'неизвестная ошибка'
 
 
 def is_triangle(a, b ,c):
+    if a <= 0 or b <= 0 or c <= 0:
+        return False
+
     return (a + b > c) and (b + c > a) and (a + c > b)
 
 
@@ -34,9 +37,9 @@ def main(args):
         sys.exit(EXIT_FAILURE)
 
     try:
-        a = int(args[0])
-        b = int(args[1])
-        c = int(args[2])
+        a = float(args[0])
+        b = float(args[1])
+        c = float(args[2])
     except ValueError:
         print(ERROR)
         sys.exit(EXIT_FAILURE)
