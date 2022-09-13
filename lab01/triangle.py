@@ -5,7 +5,7 @@ EXIT_FAILURE = 1
 
 SCALENE = 'обычный'
 ISOSCELES = 'равнобедренный'
-EQUILATERAL = 'равосторонний'
+EQUILATERAL = 'равносторонний'
 NOT_TRIANGLE = 'не треугольник'
 ERROR = 'неизвестная ошибка'
 
