@@ -40,17 +40,18 @@ def parse_test_file(filename):
     return result
 
 
+def get_output(args):
+    result = subprocess.run(args, stdout=subprocess.PIPE)
+    return result.stdout.decode('1251').strip(STRIP_CHARS)
+
+
 def run_tests(test_cases, script_name, result_file):
     total_cases = len(test_cases)
     passed_cases = 0
 
     with open(result_file, mode='w', encoding='utf-8') as f:
         for test_case in test_cases:
-            result = subprocess.run(
-                ['python', script_name, *test_case.get_args()],
-                stdout=subprocess.PIPE
-            )
-            output = result.stdout.decode('1251').strip(STRIP_CHARS)
+            output = get_output(['python', script_name, *test_case.get_args()])
 
             if output == test_case.get_expected_output():
                 print(SUCCESS, file=f)
@@ -58,7 +59,10 @@ def run_tests(test_cases, script_name, result_file):
             else:
                 print(ERROR, file=f)
 
-        result_str = '\npassed {}/{} - {:.2%}'.format(passed_cases, total_cases, passed_cases / total_cases)
+        result_str = '\npassed {}/{} - {:.2%}'.format(
+                passed_cases,
+                total_cases,
+                passed_cases / total_cases)
         print(result_str, file=f)
 
 
