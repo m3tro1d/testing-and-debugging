@@ -1,9 +1,10 @@
 import sys
 import subprocess
+import re
 
 
 EXIT_FAILURE = 1
-USAGE = 'usage: python triangle_test.py triangle.py test_cases.txt result.txt'
+USAGE = 'usage: python3 triangle_test.py triangle.py test_cases.txt result.txt'
 STRIP_CHARS = ' \n\r'
 TEST_DELIMITER = ':'
 COMMENT_INDICATOR = '#'
@@ -14,7 +15,8 @@ ERROR = 'error'
 
 class TestCase:
     def __init__(self, args, expected_output):
-        self._args = args.split(' ')
+        args = re.split(r'\s+', args.strip(STRIP_CHARS))
+        self._args = [arg.strip(STRIP_CHARS) for arg in args]
         self._expected_output = expected_output.strip(STRIP_CHARS)
 
     def get_args(self):
@@ -42,7 +44,7 @@ def parse_test_file(filename):
 
 def get_output(args):
     result = subprocess.run(args, stdout=subprocess.PIPE)
-    return result.stdout.decode('1251').strip(STRIP_CHARS)
+    return result.stdout.decode('utf-8').strip(STRIP_CHARS)
 
 
 def run_tests(test_cases, script_name, result_file):
@@ -51,7 +53,7 @@ def run_tests(test_cases, script_name, result_file):
 
     with open(result_file, mode='w', encoding='utf-8') as f:
         for test_case in test_cases:
-            output = get_output(['python', script_name, *test_case.get_args()])
+            output = get_output(['python3', script_name, *test_case.get_args()])
 
             if output == test_case.get_expected_output():
                 print(SUCCESS, file=f)

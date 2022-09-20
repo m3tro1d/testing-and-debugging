@@ -3,6 +3,9 @@ import sys
 
 EXIT_FAILURE = 1
 
+MIN_LENGTH = 1
+MAX_LENGTH = 4294967295
+
 SCALENE = 'обычный'
 ISOSCELES = 'равнобедренный'
 EQUILATERAL = 'равносторонний'
@@ -10,10 +13,15 @@ NOT_TRIANGLE = 'не треугольник'
 ERROR = 'неизвестная ошибка'
 
 
-def is_triangle(a, b ,c):
-    if a <= 0 or b <= 0 or c <= 0:
-        return False
+def validate_values(*values):
+    for value in values:
+        if value < MIN_LENGTH or value > MAX_LENGTH:
+            return False
 
+    return True
+
+
+def is_triangle(a, b ,c):
     return (a + b > c) and (b + c > a) and (a + c > b)
 
 
@@ -42,6 +50,10 @@ def main(args):
         c = float(args[2])
     except ValueError:
         print(ERROR)
+        sys.exit(EXIT_FAILURE)
+
+    if not validate_values(a, b, c):
+        print(NOT_TRIANGLE)
         sys.exit(EXIT_FAILURE)
 
     if is_equilateral_triangle(a, b, c):
