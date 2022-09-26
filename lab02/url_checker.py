@@ -12,6 +12,7 @@ class UrlChecker:
         self._root_parts = urlparse(root_url)._replace(fragment='')
         self._url_queue.put(root_url)
 
+        # TODO: more refactoring for clean and readable code
         while not self._url_queue.empty():
             url = self._url_queue.get()
 
@@ -31,9 +32,29 @@ class UrlChecker:
         return response.content, response.status_code
 
     def save_invalid_url(self, output, url, status):
+        # TODO: add URLs amount and date+time of the checking
+
+        # TODO: print the root domain and only paths like this:
+        # invalid links for links.qatl.ru
+        #
+        # index.html - 404
+        # about.hml - 502
+        # ...
+        #
+        # total: 12
+        # timestamp: 2022-09-25 23:05
         print('{}: {}'.format(status, url), file=output)
 
     def save_valid_url(self, output, url):
+        # TODO: print the root domain and only paths like this:
+        # valid links for links.qatl.ru
+        #
+        # index.html
+        # about.hml
+        # ...
+        #
+        # total: 12
+        # timestamp: 2022-09-25 23:05
         print(url, file=output)
 
     def find_clickable_links(self, page_content):
