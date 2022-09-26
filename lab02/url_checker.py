@@ -5,14 +5,13 @@ import requests
 
 
 class UrlChecker:
-    def __init__(self, root_url):
+    def check(self, root_url, valid_output, invalid_output):
         self._url_queue = Queue()
         self._encountered_urls = {}
 
         self._root_parts = urlparse(root_url)._replace(fragment='')
         self._url_queue.put(root_url)
 
-    def check(self, valid_output, invalid_output):
         while not self._url_queue.empty():
             url = self._url_queue.get()
 
