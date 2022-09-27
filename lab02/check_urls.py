@@ -1,5 +1,6 @@
-from url_checker import UrlChecker
 from args import parse_arguments
+from logger import Logger
+from url_checker import LinkChecker
 import sys
 
 
@@ -11,10 +12,10 @@ INVALID_URLS_FILENAME = 'invalid_urls.txt'
 
 
 def main(args):
-    checker = UrlChecker()
-    with (open(args.valid, 'w') as valid_output,
-          open(args.invalid, 'w') as invalid_output):
-        checker.check(args.url, valid_output, invalid_output)
+    logger = Logger(args.valid, args.invalid)
+    checker = LinkChecker(logger)
+
+    checker.check(args.url)
 
 
 if __name__ == '__main__':
