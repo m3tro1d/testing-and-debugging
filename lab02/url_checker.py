@@ -1,7 +1,18 @@
 from bs4 import BeautifulSoup
+from datetime import datetime
+from dataclasses import dataclass
 from queue import Queue
 from urllib.parse import urlparse
 import requests
+
+
+DATE_FORMAT = '%Y-%m-%d %H:%M'
+
+
+@dataclass
+class LinkInfo:
+    path: str
+    full_url: str
 
 
 class UrlChecker:
@@ -9,63 +20,57 @@ class UrlChecker:
         self._url_queue = Queue()
         self._encountered_urls = {}
 
+        self._root_url = root_url
         self._root_parts = urlparse(root_url)._replace(fragment='')
-        self._url_queue.put(root_url)
+        self._url_queue.put(LinkInfo(self._root_parts.path, root_url))
 
-        # TODO: more refactoring for clean and readable code
+        self.write_file_headers(valid_output, invalid_output)
+
+        self._valid_urls_count = 0
+        self._invalid_urls_count = 0
         while not self._url_queue.empty():
             url = self._url_queue.get()
 
-            content, status = self.get_page_content(url)
+            content, status = self.get_page_content(url.full_url)
             if status != 200:
                 self.save_invalid_url(invalid_output, url, status)
+                self._invalid_urls_count += 1
                 continue
             self.save_valid_url(valid_output, url)
+            self._valid_urls_count += 1
 
             for link in self.find_clickable_links(content):
-                if link not in self._encountered_urls:
+                if link.full_url not in self._encountered_urls:
                     self._url_queue.put(link)
-                    self._encountered_urls[link] = True
+                    self._encountered_urls[link.full_url] = True
+
+        self.write_file_footers(valid_output, invalid_output)
+
+    def write_file_headers(self, valid_output, invalid_output):
+        domain = self._root_parts.netloc
+        print('valid links for {}\n'.format(domain), file=valid_output)
+        print('invalid links for {}\n'.format(domain), file=invalid_output)
 
     def get_page_content(self, url):
         response = requests.get(url)
         return response.content, response.status_code
 
     def save_invalid_url(self, output, url, status):
-        # TODO: add URLs amount and date+time of the checking
-
-        # TODO: print the root domain and only paths like this:
-        # invalid links for links.qatl.ru
-        #
-        # index.html - 404
-        # about.hml - 502
-        # ...
-        #
-        # total: 12
-        # timestamp: 2022-09-25 23:05
-        print('{}: {}'.format(status, url), file=output)
+        print('/{} - {}'.format(url.path, status), file=output)
 
     def save_valid_url(self, output, url):
-        # TODO: print the root domain and only paths like this:
-        # valid links for links.qatl.ru
-        #
-        # index.html
-        # about.hml
-        # ...
-        #
-        # total: 12
-        # timestamp: 2022-09-25 23:05
-        print(url, file=output)
+        print('/' + url.path, file=output)
 
     def find_clickable_links(self, page_content):
         soup = BeautifulSoup(page_content, 'html.parser')
 
         result = []
         for link in soup.find_all('a', href=True):
-            if self.is_valid_local_url(link['href']):
-                yield self.build_link(link['href'])
+            path = link['href']
+            if self.is_valid_local_url_path(path):
+                yield LinkInfo(path, self.build_link(path))
 
-    def is_valid_local_url(self, url):
+    def is_valid_local_url_path(self, url):
         if url == '#':
             return False
 
@@ -77,3 +82,8 @@ class UrlChecker:
 
     def build_link(self, link):
         return self._root_parts._replace(path=link).geturl()
+
+    def write_file_footers(self, valid_output, invalid_output):
+        timestamp = datetime.now().strftime(DATE_FORMAT)
+        print('\ntotal: {}\ntimestamp: {}'.format(self._valid_urls_count, timestamp), file=valid_output)
+        print('\ntotal: {}\ntimestamp: {}'.format(self._invalid_urls_count, timestamp), file=invalid_output)

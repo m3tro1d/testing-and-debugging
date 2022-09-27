@@ -22,5 +22,4 @@ if __name__ == '__main__':
     try:
         main(args)
     except KeyboardInterrupt:
-        print('Keyboard interrupt', file=sys.stderr)
-        sys.exit(EXIT_FAILURE)
+        print('Keyboard interrupt')
