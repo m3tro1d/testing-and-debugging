@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from logger import Logger
+import urllib
 from queue import Queue
 from urllib.parse import urlparse
 import requests
@@ -49,6 +50,9 @@ class LinkChecker:
 
     def get_page_content(self, url: str):
         response = requests.get(url)
+        # 418 I'm a Teapot is not supported by requests
+        if response.status_code == 500 and response.content.startswith(b'TEAPOT'):
+            return '', 418
         return response.content, response.status_code
 
     def find_clickable_links(self, page_content: str):
