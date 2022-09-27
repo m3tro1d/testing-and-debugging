@@ -47,11 +47,11 @@ class LinkChecker:
 
         self._logger.write_footers(self._valid_urls_count, self._invalid_urls_count)
 
-    def get_page_content(self, url):
+    def get_page_content(self, url: str):
         response = requests.get(url)
         return response.content, response.status_code
 
-    def find_clickable_links(self, page_content):
+    def find_clickable_links(self, page_content: str):
         soup = BeautifulSoup(page_content, 'html.parser')
 
         result = []
@@ -70,5 +70,5 @@ class LinkChecker:
 
         return True
 
-    def build_link(self, link):
+    def build_link(self, link: str):
         return self._root_parts._replace(path=link).geturl()
