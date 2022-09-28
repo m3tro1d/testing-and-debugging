@@ -33,12 +33,12 @@ class LinkChecker:
         while not self._link_queue.empty():
             link = self._link_queue.get()
 
-            content, status = self.get_page_content(link.full_url)
-            if status != 200:
+            content, ok, status = self.get_page_content(link.full_url)
+            if not ok:
                 self._logger.log_invalid(link, status)
                 self._invalid_urls_count += 1
                 continue
-            self._logger.log_valid(link)
+            self._logger.log_valid(link, status)
             self._valid_urls_count += 1
 
             for link in self.find_clickable_links(content):
@@ -52,8 +52,8 @@ class LinkChecker:
         response = requests.get(url)
         # 418 I'm a Teapot is not supported by requests
         if response.status_code == 500 and response.content.startswith(b'TEAPOT'):
-            return '', 418
-        return response.content, response.status_code
+            return '', False, 418
+        return response.content, response.ok, response.status_code
 
     def find_clickable_links(self, page_content: str):
         soup = BeautifulSoup(page_content, 'html.parser')

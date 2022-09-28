@@ -17,8 +17,8 @@ class Logger:
         print('valid links for {}\n'.format(domain), file=self._valid_links_file)
         print('invalid links for {}\n'.format(domain), file=self._invalid_links_file)
 
-    def log_valid(self, link):
-        print('/' + link.path, file=self._valid_links_file)
+    def log_valid(self, link, status: int):
+        print('/{} - {}'.format(link.path, status), file=self._valid_links_file)
 
     def log_invalid(self, link, status: int):
         print('/{} - {}'.format(link.path, status), file=self._invalid_links_file)
