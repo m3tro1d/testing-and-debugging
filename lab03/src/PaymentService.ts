@@ -19,6 +19,13 @@ function createInvoiceRevokedEvent(invoiceId: number): Event {
   }
 }
 
+function createInvoiceChangedTotalEvent(invoiceId: number): Event {
+  return {
+    name: 'invoice_changed_total',
+    id: invoiceId,
+  }
+}
+
 class PaymentService {
   private invoices: Invoice[] = []
   private invoiceId = 0
@@ -43,7 +50,7 @@ class PaymentService {
   public revokeInvoice(invoiceId: number): void {
     const index = this.invoices.findIndex(invoice => invoice.id == invoiceId)
     if (index === -1) {
-      return
+      throw new Error('Invoice not found')
     }
 
     this.invoices.splice(index, 1)
@@ -55,7 +62,24 @@ class PaymentService {
   }
 
   public getInvoice(invoiceId: number): Invoice | undefined {
-    return this.invoices.find(invoice => invoice.id === invoiceId)
+    const invoice = this.invoices.find(invoice => invoice.id === invoiceId)
+    if (!invoice) {
+      throw new Error('Invoice not found')
+    }
+
+    return invoice
+  }
+
+  public changeInvoiceTotal(invoiceId: number, newTotal: number): void {
+    const index = this.invoices.findIndex(invoice => invoice.id === invoiceId)
+    if (index === -1) {
+      throw new Error('Invoice not found')
+    }
+
+    this.validateTotal(newTotal)
+
+    this.invoices[index].total = newTotal
+    this.dispatcher.dispatch(createInvoiceChangedTotalEvent(invoiceId))
   }
 
   private nextInvoiceId(): number {
