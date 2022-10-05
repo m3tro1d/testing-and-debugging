@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+docker run -t -i \
+  -v ${PWD}/src:/app/src \
+  -v ${PWD}/test:/app/test \
+  node-tester
