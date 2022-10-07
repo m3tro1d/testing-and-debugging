@@ -111,7 +111,7 @@ describe('payment service', () => {
         id: 1,
       })
 
-      expect(service.getInvoice(1)?.total).toStrictEqual(newTotal)
+      expect(service.getInvoice(1).total).toStrictEqual(newTotal)
     })
 
     test('changing non existing invoice total throws error', () => {
