@@ -14,7 +14,6 @@ describe('payment service', () => {
   describe('invoice creation', () => {
     test('creating an invoice dispatches an event and populates invoices', () => {
       const total = 200
-
       service.createInvoice(total)
 
       expect(mockDispatcher.dispatch).toHaveBeenCalledTimes(1)
@@ -30,19 +29,13 @@ describe('payment service', () => {
       })
     })
 
-    test('creating multiple invoices increments the id', () => {
+    test('creating and removing invoices do not break numbering', () => {
       service.createInvoice(1)
+      service.revokeInvoice(1)
       service.createInvoice(2)
 
-      expect(service.getInvoices()).toHaveLength(2)
-      expect(service.getInvoice(1)).toStrictEqual({
-        id: 1,
-        total: 1,
-      })
-      expect(service.getInvoice(2)).toStrictEqual({
-        id: 2,
-        total: 2,
-      })
+      expect(service.getInvoices()).toHaveLength(1)
+      expect(service.getInvoice(2)).toHaveProperty('id', 2)
     })
 
     test('creating invoice with invalid total value throws an error', () => {
@@ -56,9 +49,8 @@ describe('payment service', () => {
 
   describe('invoice revoking', () => {
     beforeEach(() => {
-      service.createInvoice(1)
-      service.createInvoice(2)
-      service.createInvoice(3)
+      const total = 200
+      service.createInvoice(total)
       mockClear(mockDispatcher)
     })
 
@@ -71,29 +63,14 @@ describe('payment service', () => {
         id: 1,
       })
 
-      expect(service.getInvoices()).toHaveLength(2)
+      expect(service.getInvoices).toHaveLength(0)
     })
 
     test('revoking non existing invoice throws an error', () => {
-      expect(() => service.revokeInvoice(42)).toThrowError()
+      expect(() => service.revokeInvoice(0)).toThrowError()
 
       expect(mockDispatcher.dispatch).not.toHaveBeenCalled()
-      expect(service.getInvoices()).toHaveLength(3)
-    })
-
-    test('revoking one invoice among multiple does not affect others', () => {
-      service.revokeInvoice(2)
-
-      expect(service.getInvoices()).toStrictEqual([
-        {
-          id: 1,
-          total: 1,
-        },
-        {
-          id: 3,
-          total: 3,
-        }
-      ])
+      expect(service.getInvoices()).toHaveLength(1)
     })
   })
 
@@ -117,12 +94,10 @@ describe('payment service', () => {
   })
 
   describe('changing invoice total', () => {
-    const total1 = 200
-    const total2 = 300;
+    const total = 200
 
     beforeEach(() => {
-      service.createInvoice(total1)
-      service.createInvoice(total2)
+      service.createInvoice(total)
       mockClear(mockDispatcher)
     })
 
@@ -136,11 +111,11 @@ describe('payment service', () => {
         id: 1,
       })
 
-      expect(service.getInvoice(1).total).toStrictEqual(newTotal)
+      expect(service.getInvoice(1)?.total).toStrictEqual(newTotal)
     })
 
     test('changing non existing invoice total throws error', () => {
-      expect(() => service.changeInvoiceTotal(42, 150)).toThrowError()
+      expect(() => service.changeInvoiceTotal(2, 150)).toThrowError()
       expect(mockDispatcher.dispatch).not.toHaveBeenCalled()
     })
 
@@ -148,16 +123,6 @@ describe('payment service', () => {
       expect(() => service.changeInvoiceTotal(1, 0)).toThrowError(RangeError)
       expect(() => service.changeInvoiceTotal(1, -1)).toThrowError(RangeError)
       expect(mockDispatcher.dispatch).not.toHaveBeenCalled()
-    })
-
-    test('changing one invoice among multiple does not affect others', () => {
-      const newTotal = 150
-      service.changeInvoiceTotal(2, newTotal)
-
-      expect(service.getInvoice(1)).toStrictEqual({
-        id: 1,
-        total: total1,
-      })
     })
   })
 })

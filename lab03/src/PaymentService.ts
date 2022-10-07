@@ -61,7 +61,7 @@ class PaymentService {
     return this.invoices.slice()
   }
 
-  public getInvoice(invoiceId: number): Invoice {
+  public getInvoice(invoiceId: number): Invoice | undefined {
     const invoice = this.invoices.find(invoice => invoice.id === invoiceId)
     if (!invoice) {
       throw new Error('Invoice not found')
