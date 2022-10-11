@@ -81,22 +81,25 @@ describe('payment service', () => {
       expect(service.getInvoices()).toHaveLength(1)
     })
 
-    test('revoking one invoice among multiple does not affect the others', () => {
-      service.createInvoice(2)
-      service.createInvoice(3)
+    describe('multiple invoices', () => {
+      beforeEach(() => {
+        service.createInvoice(2)
+        service.createInvoice(3)
+      })
+      test('revoking one invoice among multiple does not affect the others', () => {
+        service.revokeInvoice(2)
 
-      service.revokeInvoice(2)
-
-      expect(service.getInvoices()).toStrictEqual([
-        {
-          id: 1,
-          total: total,
-        },
-        {
-          id: 3,
-          total: 3,
-        },
-      ])
+        expect(service.getInvoices()).toStrictEqual([
+          {
+            id: 1,
+            total: total,
+          },
+          {
+            id: 3,
+            total: 3,
+          },
+        ])
+      })
     })
   })
 
@@ -151,27 +154,31 @@ describe('payment service', () => {
       expect(mockDispatcher.dispatch).not.toHaveBeenCalled()
     })
 
-    test('changing one invoice among multiple does not affect the others', () => {
-      const newTotal = 42;
-      service.createInvoice(2)
-      service.createInvoice(3)
+    describe('multiple invoices', () => {
+      beforeEach(() => {
+        service.createInvoice(2)
+        service.createInvoice(3)
+      })
 
-      service.changeInvoiceTotal(2, 42)
+      test('changing one invoice among multiple does not affect the others', () => {
+        const newTotal = 42;
+        service.changeInvoiceTotal(2, 42)
 
-      expect(service.getInvoices()).toStrictEqual([
-        {
-          id: 1,
-          total: total,
-        },
-        {
-          id: 2,
-          total: newTotal,
-        },
-        {
-          id: 3,
-          total: 3,
-        },
-      ])
+        expect(service.getInvoices()).toStrictEqual([
+          {
+            id: 1,
+            total: total,
+          },
+          {
+            id: 2,
+            total: newTotal,
+          },
+          {
+            id: 3,
+            total: 3,
+          },
+        ])
+      })
     })
   })
 })
