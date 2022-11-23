@@ -17,9 +17,9 @@ class Runner:
             try:
                 self.run_test(test)
                 passed_count += 1
-                print('[{}/{}] Test passed'.format(number, test_count))
+                print('[{}/{}] \'{}\' PASSED'.format(number, test_count, test.get_description()))
             except Exception as e:
-                print('[{}/{}] Test failed: {}'.format(number, test_count, str(e)))
+                print('[{}/{}] \'{}\' FAILED\n{}'.format(number, test_count, str(e)))
 
         print('\nPassed {}/{} {:.2%}'.format(passed_count, test_count, passed_count / test_count))
 

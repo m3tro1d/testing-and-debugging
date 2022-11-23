@@ -27,6 +27,36 @@
       "remember": {
         "product_id": "id"
       }
+    },
+    {
+      "description": "Removing an existing product",
+      "method": "DELETE",
+      "uri": "/api/deleteproduct",
+      "params": {
+        "id": "$product_id"
+      },
+      "request": None,
+      "expected": {
+        "status": 200,
+        "response": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "description": "Removing non-existing product",
+      "method": "DELETE",
+      "uri": "/api/deleteproduct",
+      "params": {
+        "id": "123321000"
+      },
+      "request": None,
+      "expected": {
+        "status": 200,
+        "response": {
+          "status": 0
+        }
+      }
     }
   ]
 }
