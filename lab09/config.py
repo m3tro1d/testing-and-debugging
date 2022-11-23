@@ -13,8 +13,12 @@ def parse_config(path):
         description = test_data['description']
         request_data = create_request_data(test_data, base_url)
         response_data = create_response_data(test_data['expected'])
+        
+        remember_vars = None
+        if 'remember' in test_data:
+            remember_vars = test_data['remember']
 
-        result.append(Test(description, request_data, response_data))
+        result.append(Test(description, request_data, response_data, remember_vars))
 
     return result
 

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
+from Runner import Runner
 from args import parse_arguments
 from config import parse_config
-from runner import run_tests
 import sys
 
 
 def main(args):
     tests = parse_config(args.config_file)
-    run_tests(tests)
+    runner = Runner()
+    runner.run(tests)
 
 
 if __name__ == '__main__':
