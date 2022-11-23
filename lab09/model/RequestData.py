@@ -4,11 +4,11 @@ class RequestData:
         self._url = url
         self._body = body
 
-    def get_method():
+    def get_method(self):
         return self._method
 
-    def get_url():
+    def get_url(self):
         return self._url
 
-    def get_body():
+    def get_body(self):
         return self._body

@@ -10,7 +10,7 @@
         "category_id": "5",
         "title": "змей",
         "alias": "zmey",
-        "content": "don't know",
+        "content": "'DROP TABLE product;",
         "price": "100",
         "old_price": "322",
         "status": "1",
@@ -19,8 +19,13 @@
         "hit": "1"
       },
       "expected": {
-        "status": 201,
-        "response": null
+        "status": 200,
+        "response": {
+          "status": 1
+        }
+      },
+      "remember": {
+        "product_id": "id"
       }
     }
   ]
