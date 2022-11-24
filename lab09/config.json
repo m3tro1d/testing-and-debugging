@@ -1,10 +1,10 @@
 {
-  "base_url": "http://shop.qatl.ru",
+  "base_url": "http://shop.qatl.ru/api",
   "tests": [
     {
       "description": "Creating a product",
       "method": "POST",
-      "uri": "/api/addproduct",
+      "uri": "/addproduct",
       "request": {
         "id": "200",
         "category_id": "5",
@@ -15,7 +15,7 @@
         "old_price": "322",
         "status": "1",
         "keywords": "fist",
-        "description": "shut your fucking face uncle fucker",
+        "description": "alert('shut your fucking face uncle fucker')",
         "hit": "1"
       },
       "expected": {
@@ -29,9 +29,21 @@
       }
     },
     {
+      "description": "Listing products after creating one",
+      "method": "GET",
+      "uri": "/products",
+      "request": null,
+      "expected": {
+        "status": 200,
+        "response": [
+          # TODO: check fields
+        ]
+      }
+    },
+    {
       "description": "Removing an existing product",
       "method": "DELETE",
-      "uri": "/api/deleteproduct",
+      "uri": "/deleteproduct",
       "params": {
         "id": "$product_id"
       },
@@ -46,7 +58,7 @@
     {
       "description": "Removing non-existing product",
       "method": "DELETE",
-      "uri": "/api/deleteproduct",
+      "uri": "/deleteproduct",
       "params": {
         "id": "123321000"
       },
@@ -57,6 +69,9 @@
           "status": 0
         }
       }
+    },
+    {
+      "description": "Listing products after deletion"
     }
   ]
 }

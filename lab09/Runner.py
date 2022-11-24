@@ -44,6 +44,8 @@ class Runner:
 
 
     def make_request(self, request_data):
+        # TODO: get, post requests
+        # TODO: validate response with https://python-jsonschema.readthedocs.io/en/stable/
         response = requests.post(request_data.get_url(self._remember_vars), json=request_data.get_body())
 
         body = response.content
