@@ -14,7 +14,7 @@ def parse_config(path):
         request_data = create_request_data(test_data, base_url)
         response_data = create_response_data(test_data['expected'])
         
-        remember_vars = None
+        remember_vars = dict()
         if 'remember' in test_data:
             remember_vars = test_data['remember']
 
@@ -27,8 +27,11 @@ def create_request_data(data, base_url):
     method = data['method']
     url = base_url + data['uri']
     body = data['request']
+    params = dict()
+    if 'params' in data:
+        params = data['params']
 
-    return RequestData(method, url, body)
+    return RequestData(method, url, params, body)
 
 
 def create_response_data(data):

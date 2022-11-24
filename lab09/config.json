@@ -35,7 +35,7 @@
       "params": {
         "id": "$product_id"
       },
-      "request": None,
+      "request": null,
       "expected": {
         "status": 200,
         "response": {
@@ -50,7 +50,7 @@
       "params": {
         "id": "123321000"
       },
-      "request": None,
+      "request": null,
       "expected": {
         "status": 200,
         "response": {

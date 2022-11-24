@@ -5,7 +5,7 @@ from model.ResponseData import ResponseData
 
 class Runner:
     def __init__(self):
-        self._memory = dict()
+        self._remember_vars = dict()
 
     def run(self, tests):
         test_count = len(tests)
@@ -17,11 +17,18 @@ class Runner:
             try:
                 self.run_test(test)
                 passed_count += 1
-                print('[{}/{}] \'{}\' PASSED'.format(number, test_count, test.get_description()))
+                print('[{}/{}] \'{}\' PASSED'.format(number,
+                    test_count,
+                    test.get_description()))
             except Exception as e:
-                print('[{}/{}] \'{}\' FAILED\n{}'.format(number, test_count, str(e)))
+                print('[{}/{}] \'{}\' FAILED\n{}'.format(number,
+                    test_count,
+                    test.get_description(),
+                    str(e)))
 
-        print('\nPassed {}/{} {:.2%}'.format(passed_count, test_count, passed_count / test_count))
+        print('\nPassed {}/{} {:.2%}'.format(passed_count,
+            test_count,
+            passed_count / test_count))
 
     def run_test(self, test):
         actual_response = self.make_request(test.get_request_data())
@@ -33,11 +40,11 @@ class Runner:
         if not self.body_contains(expected_response.get_body(), actual_response.get_body()):
             raise RuntimeError('expected body:\n{}\nactual\n{}'.format(expected_response.get_body(), actual_response.get_body()))
 
-        self.save_remember_variables(test.get_remember_vars(), actual_response.get_body())
+        self.save_remember_vars(test.get_remember_vars(), actual_response.get_body())
 
 
     def make_request(self, request_data):
-        response = requests.post(request_data.get_url(), json=request_data.get_body())
+        response = requests.post(request_data.get_url(self._remember_vars), json=request_data.get_body())
 
         body = response.content
         try:
@@ -55,9 +62,9 @@ class Runner:
 
         return True
 
-    def save_remember_variables(self, remember_vars, body):
+    def save_remember_vars(self, remember_vars, body):
         for var_name, response_key in remember_vars.items():
             if response_key not in body:
                 raise RuntimeError('remember variable {} not found in response'.format(var_name))
 
-            self._memory[var_name] = body[response_key]
+            self._remember_vars[var_name] = body[response_key]
