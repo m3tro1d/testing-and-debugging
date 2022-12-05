@@ -1,0 +1,58 @@
+# ReflectionSize & Rotation
+
+Width: 0.01, 100, 58712
+Height: 0.01, 100, 58712
+WidthScale: 0.9, 50, 100, 630086
+HeightScale: 0.9, 50, 100, 630086
+LockAspectRatio: On, Off
+Rotate: 0, 90, 180, 270, 360
+Flip: None, Horizontal, Vertical
+
+# Position
+
+PositionFrom: TopLeft, Center
+X: -58712, 1, 58712
+Y: -58712, 1, 58712
+
+# Text fiting
+
+IndentLeft: 0, 0.01, 5, 9999
+IndentRight: 0, 0.01, 5, 9999
+SpecialIndent: None, FirstLine, Hanging
+SpecialIndentBy: 0, 0.01, 5, 9999
+Autofit: None, ShrinkText, FitText
+PaddingTop: 0, 1, 2.0198
+PaddingBottom: 0, 1, 2.0198
+PaddingLeft: 0, 1, 2.0198
+PaddingRight: 0, 1, 2.0198
+
+# Drop shadow
+
+DropShadow: On, Off
+Color: None, Black, Red, Green
+ShadowTransparency: 0, 50, 100
+Angle: 0, 90, 180, 270, 360
+ShadowDistance: 0, 50, 100
+BlurRadius: 0, 50, 100
+
+# Reflection
+
+Reflection: On, Off
+ReflectionTransparency: 0, 50, 100
+ReflectionDistance: 0, 50, 100
+ReflectionSize: 0, 50, 100
+
+
+# Constraints
+
+IF [SpecialIndent] = "None" THEN [SpecialIndentBy] = 0;
+
+IF [DropShadow] = "Off" THEN [Color] = "None";
+IF [DropShadow] = "Off" THEN [ShadowTransparency] = 0;
+IF [DropShadow] = "Off" THEN [Angle] = 0;
+IF [DropShadow] = "Off" THEN [ShadowDistance] = 0;
+IF [DropShadow] = "Off" THEN [BlurRadius] = 0;
+
+IF [Reflection] = "Off" THEN [ReflectionTransparency] = 0;
+IF [Reflection] = "Off" THEN [ReflectionDistance] = 0;
+IF [Reflection] = "Off" THEN [ReflectionSize] = 0;
