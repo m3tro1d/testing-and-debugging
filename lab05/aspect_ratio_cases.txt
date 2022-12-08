@@ -1,0 +1,6 @@
+WidthChanged: Yes, No
+HeightChangedProportionally: Yes, No
+
+LockAspectRatio: On, Off
+
+IF [LockAspectRatio] = "On" AND [WidthChanged] = "Yes" THEN [HeightChangedProportionally] = "Yes";

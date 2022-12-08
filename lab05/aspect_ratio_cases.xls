@@ -1,0 +1,5 @@
+WidthChanged	HeightChangedProportionally	LockAspectRatio
+No	No	On
+No	Yes	Off
+Yes	No	Off
+Yes	Yes	On

@@ -6,7 +6,7 @@ WidthScale: 0.9, 50, 100, 58712
 Height: 0.81, 67.5, 90, 135
 HeightScale: 0.9, 75, 100, 150
 
-LockAspectRatio: On, Off
+LockAspectRatio: Default
 
 Rotate: 0, 3, 90, 180, 270, 360
 Flip: None, Horizontal, Vertical
