@@ -1,11 +1,14 @@
 # ReflectionSize & Rotation
 
-Width: 0.01, 100, 58712
-Height: 0.01, 100, 58712
-WidthScale: 0.9, 50, 100, 630086
-HeightScale: 0.9, 50, 100, 630086
+Width: 1.35, 75, 150, 88068
+WidthScale: 0.9, 50, 100, 58712
+
+Height: 0.81, 67.5, 90, 135
+HeightScale: 0.9, 75, 100, 150
+
 LockAspectRatio: On, Off
-Rotate: 0, 90, 180, 270, 360
+
+Rotate: 0, 3, 90, 180, 270, 360
 Flip: None, Horizontal, Vertical
 
 # Position
@@ -44,6 +47,16 @@ ReflectionSize: 0, 50, 100
 
 
 # Constraints
+
+IF [Width] = 1.35 THEN [WidthScale] = 0.9;
+IF [Width] = 75 THEN [WidthScale] = 50;
+IF [Width] = 150 THEN [WidthScale] = 100;
+IF [Width] = 88068 THEN [WidthScale] = 58712;
+
+IF [Height] = 0.81 THEN [HeightScale] = 0.9;
+IF [Height] = 67.5 THEN [HeightScale] = 75;
+IF [Height] = 90 THEN [HeightScale] = 100;
+IF [Height] = 135 THEN [HeightScale] = 150;
 
 IF [SpecialIndent] = "None" THEN [SpecialIndentBy] = 0;
 
