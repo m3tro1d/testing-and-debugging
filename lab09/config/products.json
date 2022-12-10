@@ -11,30 +11,6 @@
     "hit": "1"
   },
 
-  "invalid_hit": {
-    "category_id": "1",
-    "title": "Creeping Death",
-    "content": "A limited edition Egyptian watch",
-    "price": "100",
-    "old_price": "120",
-    "status": "1",
-    "keywords": "kw",
-    "description": "The finest piece of classic clock machinery!",
-    "hit": 2
-  },
-
-  "invalid_status": {
-    "category_id": "1",
-    "title": "Creeping Death",
-    "content": "A limited edition Egyptian watch",
-    "price": "100",
-    "old_price": "120",
-    "status": 2,
-    "keywords": "kw",
-    "description": "The finest piece of classic clock machinery!",
-    "hit": "1"
-  },
-
   "empty": {},
 
   "null": null

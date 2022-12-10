@@ -17,7 +17,8 @@ class TestProductsApi(unittest.TestCase):
         self._api = ProductsApi()
         self._created_product_ids = []
         self._products = self._load_config_json(self._PRODUCTS_FILE)
-        self._products_schema = self._load_config_json(self._PRODUCTS_SCHEMA_FILE)
+        self._products_schema = self._load_config_json(
+                self._PRODUCTS_SCHEMA_FILE)
 
     def tearDown(self):
         for product_id in self._created_product_ids:
@@ -29,6 +30,16 @@ class TestProductsApi(unittest.TestCase):
         self.assertGreater(len(products), 0, 'products list is not empty')
         self.assertTrue(
                 self._json_matches_schema(products, self._products_schema))
+
+    def test_CreatingWithEmptyProduct_ReturnsError(self):
+        response = self._create_product(self._products['empty'])
+
+        self.assertEqual(response['status'], 0, 'response status')
+
+    def test_CreatingWithNullProduct_ReturnsError(self):
+        response = self._create_product(self._products['null'])
+
+        self.assertEqual(response['status'], 0, 'response status')
 
     def test_DeletingExistingProduct_RemovesItFromTheList(self):
         product = self._create_product(self._products['valid'])
@@ -58,8 +69,11 @@ class TestProductsApi(unittest.TestCase):
 
 
     def _create_product(self, body):
-        response = self._api.add(body)
-        self._created_product_ids.append(response['id'])
+        try:
+            response = self._api.add(body)
+            self._created_product_ids.append(response['id'])
+        except:
+            response = { 'status': 0 }
 
         return response
 
