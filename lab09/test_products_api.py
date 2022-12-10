@@ -50,11 +50,11 @@ class TestProductsApi(unittest.TestCase):
             return json.loads(f.read())
 
     def _json_matches_schema(self, data, schema):
-        # try:
-        jsonschema.validate(data, schema)
-        return True
-        # except:
-        #     return False
+        try:
+            jsonschema.validate(data, schema)
+            return True
+        except:
+            return False
 
 
     def _create_product(self, body):
