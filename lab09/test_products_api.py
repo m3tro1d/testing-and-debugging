@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from ProductsApi import ProductsApi
 from os import path
+from products_api import ProductsApi
 import json
 import jsonschema
 import unittest
