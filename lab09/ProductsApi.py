@@ -4,7 +4,7 @@ import requests
 
 class ProductsApi:
     _METHOD_GET = 'GET'
-    _METHOD_POST = 'GET'
+    _METHOD_POST = 'POST'
 
     _ID_PARAM = 'id'
 
