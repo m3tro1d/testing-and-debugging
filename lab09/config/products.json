@@ -2,13 +2,31 @@
   "valid": {
     "category_id": "1",
     "title": "Creeping Death",
+    "alias": "creeping-death",
     "content": "A limited edition Egyptian watch",
     "price": "100",
     "old_price": "120",
     "status": "1",
     "keywords": "kw",
     "description": "The finest piece of classic clock machinery!",
+    "cat": "Men",
+    "img": "no_image.jpg",
     "hit": "1"
+  },
+
+  "valid_updated": {
+    "category_id": "3",
+    "title": "I'm sure she feels sorrow",
+    "alias": "i-m-sure-she-feels-sorrow",
+    "content": "what the..?",
+    "price": "102",
+    "old_price": "118",
+    "status": "0",
+    "keywords": "updated, bitch",
+    "description": "Shittiest watch there is",
+    "cat": "Kids",
+    "img": "no_image.jpg",
+    "hit": "0"
   },
 
   "valid_for_alias": {

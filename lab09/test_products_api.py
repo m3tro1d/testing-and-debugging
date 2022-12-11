@@ -40,9 +40,6 @@ class TestProductsApi(unittest.TestCase):
         self.assertTrue(
                 self._products['valid'].items() <= list_product.items(),
                 'product in list')
-        self.assertEqual(list_product['alias'], 'creeping-death', 'alias')
-        self.assertEqual(list_product['img'], 'no_image.jpg', 'img')
-        self.assertEqual(list_product['cat'], 'Men', 'cat')
 
     def test_CreatingWithTheSameAlias_AddsPostfix(self):
         response1 = self._create_product(self._products['valid_for_alias'])
@@ -71,11 +68,19 @@ class TestProductsApi(unittest.TestCase):
 
         self.assertEqual(response['status'], 0, 'response status')
 
-    def test_EditingProduct_ChangesItInTheList(self):
-        pass
+    def test_EditingProduct_ChangesItInTheListAndUpdatesAlias(self):
+        create_response = self._create_product(self._products['valid'])
+        product = self._products['valid_updated']
+        product['id'] = str(create_response['id'])
+        response = self._api.edit(product)
 
-    def test_EditingProduct_DoesntChangeItsAlias(self):
-        pass
+        products = self._api.list()
+        list_product = self._find_product(products, create_response['id'])
+
+        self.assertEqual(response['status'], 1, 'response status')
+        self.assertTrue(
+                product.items() <= list_product.items(),
+                'product in list')
 
     def test_DeletingExistingProduct_RemovesItFromTheList(self):
         response = self._create_product(self._products['valid'])
