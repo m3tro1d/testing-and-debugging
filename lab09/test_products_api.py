@@ -44,6 +44,23 @@ class TestProductsApi(unittest.TestCase):
         self.assertEqual(list_product['img'], 'no_image.jpg', 'img')
         self.assertEqual(list_product['cat'], 'Men', 'cat')
 
+    def test_CreatingWithTheSameAlias_AddsPostfix(self):
+        response1 = self._create_product(self._products['valid_for_alias'])
+        response2 = self._create_product(self._products['valid_for_alias'])
+
+        products = self._api.list()
+        list_product1 = self._find_product(products, response1['id'])
+        list_product2 = self._find_product(products, response2['id'])
+
+        self.assertEqual(
+                list_product1['alias'],
+                self._products['valid_for_alias']['alias'],
+                'first alias')
+        self.assertEqual(
+                list_product2['alias'],
+                self._products['valid_for_alias']['alias'] + '-0',
+                'second alias')
+
     def test_CreatingWithEmptyProduct_ReturnsError(self):
         response = self._create_product(self._products['empty'])
 
@@ -76,7 +93,8 @@ class TestProductsApi(unittest.TestCase):
         self.assertEqual(response['status'], 0, 'response status')
 
     def _load_config_json(self, file_path):
-        with open(path.join(self._CONFIG_DIR, file_path)) as f:
+        full_path = path.join(self._CONFIG_DIR, file_path)
+        with open(full_path, encoding='utf-8') as f:
             return json.loads(f.read())
 
     def _json_matches_schema(self, data, schema):

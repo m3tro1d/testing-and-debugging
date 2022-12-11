@@ -11,6 +11,19 @@
     "hit": "1"
   },
 
+  "valid_for_alias": {
+    "category_id": "2",
+    "title": "Из окна",
+    "alias": "iz-okna",
+    "content": "",
+    "price": "100",
+    "old_price": "125",
+    "status": "1",
+    "keywords": "",
+    "description": "",
+    "hit": "0"
+  },
+
   "empty": {},
 
   "null": null
