@@ -87,6 +87,23 @@ class TestProductsApi(unittest.TestCase):
                 product.items() <= list_product.items(),
                 'product in list')
 
+    def test_EditingWithDuplicatingAlias_AddsIdPostfix(self):
+        self._create_product(self._products['valid_updated'])
+        create_response = self._create_product(self._products['valid'])
+
+        product = self._products['valid_updated']
+        product['id'] = str(create_response['id'])
+        response = self._api.edit(product)
+
+        products = self._api.list()
+        list_product = self._find_product(products, create_response['id'])
+
+        self.assertEqual(response['status'], 1, 'response status')
+        self.assertEqual(
+                list_product['alias'],
+                self._products['valid_updated']['alias'] + '-' + product['id'],
+                'updated alias')
+
     def test_DeletingExistingProduct_RemovesItFromTheList(self):
         response = self._create_product(self._products['valid'])
         delete_response = self._api.delete(response['id'])
