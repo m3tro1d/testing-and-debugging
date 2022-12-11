@@ -42,6 +42,18 @@
     "hit": "0"
   },
 
+  "invalid_category": {
+    "category_id": null,
+    "title": "Are you tinkering with category again?",
+    "content": "No, no",
+    "price": "100",
+    "old_price": "125",
+    "status": "1",
+    "keywords": "kw",
+    "description": "Next time eat a salad",
+    "hit": "1"
+  },
+
   "empty": {},
 
   "null": null

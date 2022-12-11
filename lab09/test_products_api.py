@@ -58,6 +58,11 @@ class TestProductsApi(unittest.TestCase):
                 self._products['valid_for_alias']['alias'] + '-0',
                 'second alias')
 
+    def test_CreatingWithInvalidCategory_ReturnsError(self):
+        response = self._create_product(self._products['invalid_category'])
+
+        self.assertEqual(response['status'], 0, 'response status')
+
     def test_CreatingWithEmptyProduct_ReturnsError(self):
         response = self._create_product(self._products['empty'])
 
