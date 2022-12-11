@@ -31,6 +31,19 @@ class TestProductsApi(unittest.TestCase):
         self.assertTrue(
                 self._json_matches_schema(products, self._products_schema))
 
+    def test_CreatingValidProduct_AddsItToTheList(self):
+        response = self._create_product(self._products['valid'])
+
+        products = self._api.list()
+        list_product = self._find_product(products, response['id'])
+
+        self.assertTrue(
+                self._products['valid'].items() <= list_product.items(),
+                'product in list')
+        self.assertEqual(list_product['alias'], 'creeping-death', 'alias')
+        self.assertEqual(list_product['img'], 'no_image.jpg', 'img')
+        self.assertEqual(list_product['cat'], 'Men', 'cat')
+
     def test_CreatingWithEmptyProduct_ReturnsError(self):
         response = self._create_product(self._products['empty'])
 
@@ -41,15 +54,21 @@ class TestProductsApi(unittest.TestCase):
 
         self.assertEqual(response['status'], 0, 'response status')
 
+    def test_EditingProduct_ChangesItInTheList(self):
+        pass
+
+    def test_EditingProduct_DoesntChangeItsAlias(self):
+        pass
+
     def test_DeletingExistingProduct_RemovesItFromTheList(self):
-        product = self._create_product(self._products['valid'])
-        response = self._api.delete(product['id'])
+        response = self._create_product(self._products['valid'])
+        delete_response = self._api.delete(response['id'])
 
         products = self._api.list()
-        product = self._find_product(products, product['id'])
+        list_product = self._find_product(products, response['id'])
 
-        self.assertEqual(response['status'], 1, 'delete response status')
-        self.assertIsNone(product, 'product is deleted')
+        self.assertEqual(delete_response['status'], 1, 'delete response status')
+        self.assertIsNone(list_product, 'product is deleted')
 
     def test_DeletingNonExistingProduct_ReturnsError(self):
         response = self._api.delete(13371488)
@@ -67,7 +86,6 @@ class TestProductsApi(unittest.TestCase):
         except:
             return False
 
-
     def _create_product(self, body):
         try:
             response = self._api.add(body)
@@ -79,7 +97,7 @@ class TestProductsApi(unittest.TestCase):
 
     def _find_product(self, products, id):
         for product in products:
-            if product['id'] == id:
+            if int(product['id']) == id:
                 return product
 
         return None
