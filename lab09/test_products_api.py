@@ -60,6 +60,11 @@ class TestProductsApi(unittest.TestCase):
                 self._products['valid_for_alias']['alias'] + '-0',
                 'second alias should have -0 postfix')
 
+    def test_CreatingWithInvalidPrice_ReturnsError(self):
+        response = self._create_product(self._products['invalid_price'])
+
+        self.assertEqual(response['status'], 0, 'response status should be 0')
+
     def test_CreatingWithInvalidCategory_ReturnsError(self):
         response = self._create_product(self._products['invalid_category'])
 
