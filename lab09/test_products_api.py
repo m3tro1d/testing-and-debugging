@@ -142,11 +142,9 @@ class TestProductsApi(unittest.TestCase):
             return False
 
     def _create_product(self, body):
-        try:
-            response = self._api.add(body)
+        response = self._api.add(body)
+        if 'id' in response:
             self._created_product_ids.append(response['id'])
-        except:
-            response = { 'status': 0 }
 
         return response
 

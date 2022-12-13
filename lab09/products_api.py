@@ -21,7 +21,10 @@ class ProductsApi:
                 ep.BASE_URL + ep.ADD_PRODUCT_URI,
                 json=product)
 
-        return response.json()
+        try:
+            return response.json()
+        except:
+            return { 'status': 0 }
 
     def edit(self, product):
         response = requests.request(
@@ -29,7 +32,10 @@ class ProductsApi:
                 ep.BASE_URL + ep.EDIT_PRODUCT_URI,
                 json=product)
 
-        return response.json()
+        try:
+            return response.json()
+        except:
+            return { 'status': 0 }
 
     def delete(self, id):
         params = { self._ID_PARAM: id }
