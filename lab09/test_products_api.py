@@ -24,12 +24,14 @@ class TestProductsApi(unittest.TestCase):
         for product_id in self._created_product_ids:
             self._api.delete(product_id)
 
-    def test_ListingProducts_ReturnsNonEmptyListWithValidStructure(self):
+    def test_GettingProducts_ReturnsNonEmptyListWithValidStructure(self):
         products = self._api.list()
 
-        self.assertGreater(len(products), 0, 'products list is not empty')
+        self.assertGreater(
+                len(products), 0, 'products list should not be empty')
         self.assertTrue(
-                self._json_matches_schema(products, self._products_schema))
+                self._json_matches_schema(products, self._products_schema),
+                'product list should match schema')
 
     def test_CreatingValidProduct_AddsItToTheList(self):
         response = self._create_product(self._products['valid'])
@@ -39,7 +41,7 @@ class TestProductsApi(unittest.TestCase):
 
         self.assertTrue(
                 self._products['valid'].items() <= list_product.items(),
-                'product in list')
+                'product in list should match the request')
 
     def test_CreatingWithTheSameAlias_AddsPostfix(self):
         response1 = self._create_product(self._products['valid_for_alias'])
@@ -52,31 +54,41 @@ class TestProductsApi(unittest.TestCase):
         self.assertEqual(
                 list_product1['alias'],
                 self._products['valid_for_alias']['alias'],
-                'first alias')
+                'first alias should match the original title')
         self.assertEqual(
                 list_product2['alias'],
                 self._products['valid_for_alias']['alias'] + '-0',
-                'second alias')
+                'second alias should have -0 postfix')
 
     def test_CreatingWithInvalidCategory_ReturnsError(self):
         response = self._create_product(self._products['invalid_category'])
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
+
+    def test_CreatingWithInvalidStatus_ReturnsError(self):
+        response = self._create_product(self._products['invalid_status'])
+
+        self.assertEqual(response['status'], 0, 'response status should be 0')
+
+    def test_CreatingWithInvalidHit_ReturnsError(self):
+        response = self._create_product(self._products['invalid_hit'])
+
+        self.assertEqual(response['status'], 0, 'response status should be 0')
 
     def test_CreatingWithMissingProps_ReturnsError(self):
         response = self._create_product(self._products['missing_props'])
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
 
     def test_CreatingWithEmptyProduct_ReturnsError(self):
         response = self._create_product(self._products['empty'])
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
 
     def test_CreatingWithNullProduct_ReturnsError(self):
         response = self._create_product(self._products['null'])
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
 
     def test_EditingProduct_ChangesItInTheListAndUpdatesAlias(self):
         create_response = self._create_product(self._products['valid'])
@@ -87,10 +99,10 @@ class TestProductsApi(unittest.TestCase):
         products = self._api.list()
         list_product = self._find_product(products, create_response['id'])
 
-        self.assertEqual(response['status'], 1, 'response status')
+        self.assertEqual(response['status'], 1, 'response status should be 1')
         self.assertTrue(
                 product.items() <= list_product.items(),
-                'product in list')
+                'product in list should be updated')
 
     def test_EditingWithDuplicatingAlias_AddsIdPostfix(self):
         self._create_product(self._products['valid_updated'])
@@ -103,13 +115,13 @@ class TestProductsApi(unittest.TestCase):
         products = self._api.list()
         list_product = self._find_product(products, create_response['id'])
 
-        self.assertEqual(response['status'], 1, 'response status')
+        self.assertEqual(response['status'], 1, 'response status should be 1')
         self.assertEqual(
                 list_product['alias'],
                 self._products['valid_updated']['alias'] + '-' + product['id'],
-                'updated alias')
+                'product should have alias with ID postfix')
 
-    def test_EditingWithMissingProps_ReturnsErrorAndChangesNothing(self):
+    def test_EditingOnlyTitle_ReturnsErrorAndChangesNothing(self):
         create_response = self._create_product(self._products['valid'])
 
         product = self._products['update_title']
@@ -119,30 +131,31 @@ class TestProductsApi(unittest.TestCase):
         products = self._api.list()
         list_product = self._find_product(products, create_response['id'])
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
         self.assertTrue(
                 self._products['valid'].items() <= list_product.items(),
-                'original product')
+                'original product should be unchanged')
 
     def test_DeletingExistingProduct_RemovesItFromTheList(self):
-        response = self._create_product(self._products['valid'])
-        delete_response = self._api.delete(response['id'])
+        create_response = self._create_product(self._products['valid'])
+        response = self._api.delete(create_response['id'])
 
         products = self._api.list()
-        list_product = self._find_product(products, response['id'])
+        list_product = self._find_product(products, create_response['id'])
 
-        self.assertEqual(delete_response['status'], 1, 'delete response status')
-        self.assertIsNone(list_product, 'product is deleted')
+        self.assertEqual(
+                response['status'], 1, 'response status should be 1')
+        self.assertIsNone(list_product, 'product should be deleted')
 
     def test_DeletingNonExistingProduct_ReturnsError(self):
         response = self._api.delete(13371488)
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
 
     def test_DeletingWithInvalidId_ReturnsError(self):
         response = self._api.delete('whatever')
 
-        self.assertEqual(response['status'], 0, 'response status')
+        self.assertEqual(response['status'], 0, 'response status should be 0')
 
     def _load_config_json(self, file_path):
         full_path = path.join(self._CONFIG_DIR, file_path)

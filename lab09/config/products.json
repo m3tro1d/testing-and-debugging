@@ -58,6 +58,30 @@
     "hit": "1"
   },
 
+  "invalid_status": {
+    "category_id": "1",
+    "title": "Are you tinkering with category again?",
+    "content": "No, no",
+    "price": "100",
+    "old_price": "125",
+    "status": null,
+    "keywords": "kw",
+    "description": "Next time eat a salad",
+    "hit": "1"
+  },
+
+  "invalid_hit": {
+    "category_id": "1",
+    "title": "Are you tinkering with category again?",
+    "content": "No, no",
+    "price": "100",
+    "old_price": "125",
+    "status": "1",
+    "keywords": "kw",
+    "description": "Next time eat a salad",
+    "hit": null
+  },
+
   "missing_props": {
     "category_id": "7",
     "content": "No, no",
