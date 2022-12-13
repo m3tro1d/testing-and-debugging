@@ -119,6 +119,11 @@ class TestProductsApi(unittest.TestCase):
 
         self.assertEqual(response['status'], 0, 'response status')
 
+    def test_DeletingWithInvalidId_ReturnsError(self):
+        response = self._api.delete('whatever')
+
+        self.assertEqual(response['status'], 0, 'response status')
+
     def _load_config_json(self, file_path):
         full_path = path.join(self._CONFIG_DIR, file_path)
         with open(full_path, encoding='utf-8') as f:
