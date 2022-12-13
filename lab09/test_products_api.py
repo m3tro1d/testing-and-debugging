@@ -109,6 +109,21 @@ class TestProductsApi(unittest.TestCase):
                 self._products['valid_updated']['alias'] + '-' + product['id'],
                 'updated alias')
 
+    def test_EditingWithMissingProps_ReturnsErrorAndChangesNothing(self):
+        create_response = self._create_product(self._products['valid'])
+
+        product = self._products['update_title']
+        product['id'] = create_response['id']
+        response = self._api.edit(product)
+
+        products = self._api.list()
+        list_product = self._find_product(products, create_response['id'])
+
+        self.assertEqual(response['status'], 0, 'response status')
+        self.assertTrue(
+                self._products['valid'].items() <= list_product.items(),
+                'original product')
+
     def test_DeletingExistingProduct_RemovesItFromTheList(self):
         response = self._create_product(self._products['valid'])
         delete_response = self._api.delete(response['id'])
