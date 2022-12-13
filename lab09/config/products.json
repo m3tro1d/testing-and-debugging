@@ -54,6 +54,17 @@
     "hit": "1"
   },
 
+  "missing_props": {
+    "category_id": "7",
+    "content": "No, no",
+    "price": "100",
+    "old_price": "125",
+    "status": "1",
+    "keywords": "kw",
+    "description": "Think fast, chuckle nuts",
+    "hit": "1"
+  },
+
   "empty": {},
 
   "null": null

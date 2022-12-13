@@ -63,6 +63,11 @@ class TestProductsApi(unittest.TestCase):
 
         self.assertEqual(response['status'], 0, 'response status')
 
+    def test_CreatingWithMissingProps_ReturnsError(self):
+        response = self._create_product(self._products['missing_props'])
+
+        self.assertEqual(response['status'], 0, 'response status')
+
     def test_CreatingWithEmptyProduct_ReturnsError(self):
         response = self._create_product(self._products['empty'])
 
